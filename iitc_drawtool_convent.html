@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IITC 圖形轉換</title>
+        <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <style type="text/css">
+            html,body{
+                height: 100%;
+            }
+            #wrap{
+                min-height: 100%;
+                height: auto;
+                margin: 0 auto -60px;
+                padding: 0 0 60px;
+            }
+            .comment {
+                 width:100%;
+                 overflow:auto;
+                 word-break:break-all;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var Import = function ( data ){
+                console.log( data );
+                var output = [];
+                $.each( data, function(index, item){
+                    var extraOpt = {};
+                    
+                    switch( item.type ){
+                        case 'polyline':
+                            console.log("line");
+                            output.push(data[index]);
+                            break;
+                        case 'polygon':
+                            console.log("gon");
+                            item.type='polyline';
+                            item.latLngs.push(item.latLngs[0]);
+                            output.push(data[index]);
+                            break;
+                        case 'circle':
+                            console.log("circle");
+                            output.push(data[index]);
+                            break;
+                        case 'marker':
+                            console.log("marker");
+                            output.push(data[index]);
+                            break;
+                    }
+                } );
+                return JSON.stringify(output);
+            };
+            var convert = function(){
+                document.getElementById("Output1").value = Import( JSON.parse(document.getElementById("Input1").value ) );
+            };
+        </script>
+        
+        <div id="wrap">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    <ul class="nav nav-sidebar">
+                        <li class="active">
+                            <a href="#">
+                                "IITC 圖形轉換"
+                                
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <h1>DrawTools的Field轉為Link的小工具</h1>
+        		    從 DrawTools Opt 內的 Drawn Items 複製到上方的格子，按下轉換後，將會把所有的 Field 轉換為 Link
+                    <form name="form1">
+                        <textarea class="comment" id="Input1" size="20" rows="20"></textarea><br>
+                        <input type="button" name="submit" value="Convert" size="20" onclick="convert()"><br>
+                        <textarea class="comment" id="Output1" size="20" rows="20"></textarea><br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
